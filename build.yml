@@ -1,0 +1,22 @@
+name: Compilar Windows
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compilar Master
+        shell: pwsh
+        run: msbuild Master/Master.csproj /p:Configuration=Release /p:Platform=AnyCPU /p:TargetFrameworkRootPath="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\"
+      - name: Compilar Cliente
+        shell: pwsh
+        run: msbuild Cliente/Cliente.csproj /p:Configuration=Release /p:Platform=AnyCPU /p:TargetFrameworkRootPath="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LabComandos-Windows
+          path: |
+            Master/bin/Release/*.exe
+            Cliente/bin/Release/*.exe
